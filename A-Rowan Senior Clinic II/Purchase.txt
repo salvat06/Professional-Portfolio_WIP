@@ -1,0 +1,58 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+public class Purchase : MonoBehaviour{
+private Vector3 newPosition = new Vector3(793,65,742);    //Changes postion of object to these coordinates (Testing coordinates)
+private Vector3 noPosition = new Vector3(794, 67, 744);   //Changes the position to (or back to) these (testing) coordinates when chosen "No, thanks."
+float speed = 30;     //Speed of the object's rotation
+bool wasClicked;
+private bool showGUI = false;
+
+	
+//When the mouse button is up, the object is red, move the object, and calls the Purchase choice GUI (Testing purpose only)
+void OnMouseDown() {
+   wasClicked = true;
+   showGUI = true;
+   renderer.material.color = Color.red;
+   transform.position = Vector3.Lerp(transform.position, newPosition, 1);
+   			OnGUI ();	
+}
+
+//When the mouse button is up, the object is blue (Testing purpose only)
+void OnMouseUp() {
+	wasClicked = false;
+    renderer.material.color = Color.blue;
+}
+
+//When the cursor is no longer over the object, the rotating stops
+void OnMouseExit() {
+    renderer.material.color = Color.blue;
+    transform.Rotate(Vector3.zero);
+}
+
+//When the cursor is over the object, it rotates
+void OnMouseOver(){
+   //Vector3.down can be changed to up, left, or right depending on the wanted direction
+   transform.Rotate(Vector3.down, speed * Time.deltaTime);
+}
+
+//Shows a choice of Yes or No when the object is clicked
+void OnGUI () {
+		if(showGUI){
+		// Make a background box
+		GUI.Box(new Rect(175,100,200,100), "Do you want to buy this item?");
+
+		// Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
+		if(GUI.Button(new Rect(235,140,100,20), "Yes, please")) {
+			Destroy (gameObject);
+		}
+
+		// Make the second button.
+		if(GUI.Button(new Rect(235,170,100,20), "No, thank you")) {
+			transform.position = Vector3.Lerp(transform.position, noPosition, 1);
+			showGUI = false;
+		}
+		}
+	}
+}
